@@ -84,6 +84,11 @@ if [[ -n "$VSCODE_EXTENSION_LIST" ]]; then
             *)
                 echo -e "\n#### Installing $select_extension ####"
                 code --install-extension "$select_extension"
+                
+                if [[ "$select_extension" == "platformio.platformio-ide" ]]; then
+                    curl -fsSL https://raw.githubusercontent.com/platformio/platformio-core/develop/platformio/assets/system/99-platformio-udev.rules | sudo tee /etc/udev/rules.d/99-platformio-udev.rules
+                    sudo udevadm control --reload-rules && sudo udevadm trigger
+                fi
             ;;
         esac
     done
